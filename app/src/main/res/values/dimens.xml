@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="textTitlesize">20sp</dimen>
+    <dimen name="authorTextSize">18sp</dimen>
+    <dimen name="publishedDatePadding">8dp</dimen>
+</resources>
