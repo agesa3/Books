@@ -36,12 +36,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLoading = findViewById(R.id.pb_loading);
+        Intent intent = getIntent();
+        String query = intent.getStringExtra("Query");
+        URL bookUrl;
         rvBooks = findViewById(R.id.rv_books);
         LinearLayoutManager booksLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvBooks.setLayoutManager(booksLayoutManager);
 
+
         try {
-            URL bookUrl = ApiUtil.buildUrl("cooking");
+            if (query == null || query.isEmpty()) {
+                bookUrl = ApiUtil.buildUrl("cooking");
+            } else {
+                bookUrl = new URL(query);
+            }
+
             new BookQueryTask().execute(bookUrl);
 
         } catch (Exception e) {
@@ -58,6 +67,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
+        ArrayList<String> recentList = SharedPUtil.getQueryList(getApplicationContext());
+        int itemNum = recentList.size();
+
+        MenuItem recentMenu;
+        for (int i = 0; i < itemNum; i++) {
+            recentMenu = menu.add(Menu.NONE, i, Menu.NONE, recentList.get(i));
+        }
         return true;
 
     }
@@ -70,6 +86,24 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 startActivity(intent);
                 return true;
             default:
+                int position = item.getItemId() + 1;
+                String preferenceName = SharedPUtil.QUERY + String.valueOf(position);
+                String query = SharedPUtil.getPreferenceString(getApplicationContext(), preferenceName);
+                String[] prefParams = query.split("\\,");
+                String[] queryParams = new String[4];
+                for (int i = 0; i < prefParams.length; i++) {
+                    queryParams[i] = prefParams[i];
+                }
+                URL bookUrl = ApiUtil.buildUrl(
+                        (queryParams[0] == null) ? "" : queryParams[0],
+                        (queryParams[1] == null) ? "" : queryParams[0],
+                        (queryParams[2] == null) ? "" : queryParams[0],
+                        (queryParams[3] == null) ? "" : queryParams[0]
+
+                );
+                new BookQueryTask().execute(bookUrl);
+
+
                 return super.onOptionsItemSelected(item);
         }
 
@@ -121,13 +155,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             } else {
                 rvBooks.setVisibility(View.VISIBLE);
                 tvError.setVisibility(View.INVISIBLE);
+                ArrayList<Book> books = ApiUtil.getBookFromJson(result);
+                String resultString = "";
+
+                BooksAdapter adapter = new BooksAdapter(books);
+                rvBooks.setAdapter(adapter);
             }
 
-            ArrayList<Book> books = ApiUtil.getBookFromJson(result);
-            String resultString = "";
-
-            BooksAdapter adapter = new BooksAdapter(books);
-            rvBooks.setAdapter(adapter);
 
         }
 

@@ -7,5 +7,6 @@
     <string name="author_s_name">Author\'s Name</string>
     <string name="publisher">Publisher</string>
     <string name="isbn">ISBN</string>
+    <string name="input_message">Please input text.Field should not be Empty</string>
     <string name="advanced_search">Advanced Search</string>
 </resources>
