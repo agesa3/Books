@@ -19,18 +19,17 @@ public class Book implements Parcelable {
     public String description;
 //    public String thumbnail;
 
-    public Book(String id, String title, String subTitle, String[] author, String publisher, String publishDate,String description) {
+    public Book(String id, String title, String subTitle, String[] author, String publisher, String publishDate, String description) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.author = TextUtils.join(",", author);
         this.publisher = publisher;
         this.publishDate = publishDate;
-        this.description=description;
-//        this.thumbnail=thumbnail;
+        this.description = description;
+       // this.thumbnail = thumbnail;
 
     }
-
 
 
     protected Book(Parcel in) {
@@ -40,8 +39,8 @@ public class Book implements Parcelable {
         author = in.readString();
         publisher = in.readString();
         publishDate = in.readString();
-        description=in.readString();
-//        thumbnail=in.readString();
+        description = in.readString();
+        //thumbnail = in.readString();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -70,7 +69,7 @@ public class Book implements Parcelable {
         dest.writeString(publisher);
         dest.writeString(publishDate);
         dest.writeString(description);
-       // dest.writeString(thumbnail);
+       //  dest.writeString(thumbnail);
     }
 //    @BindingAdapter({"android:imageUrl"})
 //    public static void loadImage(ImageView view,String imageUrl){

@@ -3,4 +3,9 @@
     <string name="errorDataMsg">Error Loading Data From Google Books</string>
     <string name="title_text_view">Title Text View</string>
     <string name="search">Search</string>
+    <string name="title">Title</string>
+    <string name="author_s_name">Author\'s Name</string>
+    <string name="publisher">Publisher</string>
+    <string name="isbn">ISBN</string>
+    <string name="advanced_search">Advanced Search</string>
 </resources>
